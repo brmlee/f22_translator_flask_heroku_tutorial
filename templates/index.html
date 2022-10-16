@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>📑MDST Translator</title>
+    <link rel="stylesheet" href="static/style.css">
+</head>
+<body>
+    <header>
+        The Official MDST Translator 1.0
+    </header>
+    <div id="container">
+        <!-- <input type="text" id="input"> -->
+        <div id="io_head">
+            <div id="selector">
+                Translate
+                <select class="input">
+                    <option value="Detect">Detect</option>
+                    <option value="German">German</option>
+                    <option value="English">English</option>
+                    <option value="Spanish">Spanish</option>
+                </select>
+                to
+                <select class="output">
+                    <option value="Spanish">Spanish</option>
+                    <option value="English">English</option>
+                    <option value="German">German</option>
+                </select>
+
+            </div>
+        </div>
+        <div id="io_center">
+            <div id="input">
+                <div class="options_bar">
+                    <button onclick="speak(input.value)">
+                        SPEAK!
+                    </button>
+                    <button onclick="getTranslation(input.value)">
+                        translate!
+                    </button>
+                </div>
+                <textarea placeholder="translate something..."></textarea>
+            </div>
+            <div id="output">
+                <div class="options_bar">
+                    <button onclick="speak(input.value)">
+                        SPEAK!
+                    </button>
+                    <button onclick="getTranslation(input.value)">
+                        translate!
+                    </button>
+                </div>
+            </div>
+            </div>
+        </div>
+    </div>
+    <script src="static/main.js"></script>
+</body>
