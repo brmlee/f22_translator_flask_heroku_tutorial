@@ -93,6 +93,7 @@ def getCombos():
         return jsonify(combos)
         
 
-@app.route("/.well-known/acme-challenge/oTmzGQ52oisrtMS52ZMXra2qhrZY2r-yzYzwlykbxDU")
-def getChallenge(path):
-        return send_from_directory('static',path)
+url_for('static',filename='.well-known/acme-challenge/oTmzGQ52oisrtMS52ZMXra2qhrZY2r-yzYzwlykbxDU')
+# @app.route("/.well-known/acme-challenge/oTmzGQ52oisrtMS52ZMXra2qhrZY2r-yzYzwlykbxDU")
+# def getChallenge(path):
+#         return send_from_directory('static',path)
