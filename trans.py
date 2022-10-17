@@ -48,6 +48,7 @@ def index():
         print("Hello World!")
         url_for('static',filename='style.css')
         url_for('static',filename='main.js')
+        url_for('static',filename='.well-known/acme-challenge/oTmzGQ52oisrtMS52ZMXra2qhrZY2r-yzYzwlykbxDU')
         return render_template("index.html",name="MDST Official Translator")
 
 
@@ -93,7 +94,8 @@ def getCombos():
         return jsonify(combos)
         
 
-url_for('static',filename='.well-known/acme-challenge/oTmzGQ52oisrtMS52ZMXra2qhrZY2r-yzYzwlykbxDU')
-# @app.route("/.well-known/acme-challenge/oTmzGQ52oisrtMS52ZMXra2qhrZY2r-yzYzwlykbxDU")
-# def getChallenge(path):
-#         return send_from_directory('static',path)
+@app.route('/.well-known/acme-challenge/<path:path>')
+def getChallenge(path):
+        print("tried to access!! L fat L")
+        return send_from_directory('static',path)
+
