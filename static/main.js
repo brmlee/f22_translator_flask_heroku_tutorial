@@ -68,12 +68,17 @@ async function getTranslation(string_to_translate) {
         console.log(data);
         output.innerText = "There was an error while translating.";
     }
-    // fetch(req)
-    // .then(response => response.json())
-    // .then(json => {
-    //     console.log(json);
-    //     output.innerText = json.output;
-    // });
 }
 
 // the code below this line is for visual purposes
+function swap() {
+    if(input_lang_selector.value == "Detect") return;
+    var new_input = output.innerText,
+        new_output = input.value,
+        new_input_lang = output_lang_selector.value,
+        new_output_lang = input_lang_selector.value;
+    output.innerText = new_output;
+    input.value = new_input;
+    output_lang_selector.value = new_output_lang;
+    input_lang_selector.value = new_input_lang;
+}
