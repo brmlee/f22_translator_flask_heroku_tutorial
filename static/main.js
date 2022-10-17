@@ -5,6 +5,11 @@ var output = document.getElementById("output"),
 
 var input_string;
 
+input.textContent = "ich bin eine banane";
+output.textContent = "I am a banana";
+input_lang_selector.value = "German";
+output_lang_selector.value = "English";
+
 var translations = ["aafhwei","iweafjwoi","ihfoahwefi"];
 
 function speak(speech) {
