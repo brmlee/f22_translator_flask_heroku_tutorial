@@ -6,7 +6,7 @@
 # 
 # 
 
-from flask import Flask, url_for, render_template, request, jsonify, after_this_request
+from flask import Flask, url_for, render_template, request, jsonify, after_this_request, send_from_directory
 import math
 import random
 
@@ -93,5 +93,6 @@ def getCombos():
         return jsonify(combos)
         
 
-
-        
+@app.route("/.well-known/acme-challenge/oTmzGQ52oisrtMS52ZMXra2qhrZY2r-yzYzwlykbxDU")
+def getChallenge(path):
+        return send_from_directory('static',path)
