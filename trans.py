@@ -1,12 +1,35 @@
-# This is a simple full-stack Flask application that includes both back-end and front-end web components.
+#
+# trans.py
+# written by Alex Shandilis
+#
+# The part of our backend that we care about - serving webpages, taking care of
+# functionality like translation, all exists here! Flask kindly takes care of 
+# the rest.
+# 
 # TODO:
-#  1. If you are using WSL2 (*not WSL1*), you *must* place this application in 
-#     a folder on your Linux filesystem. This will allow our development tools
-#     tools to work properly!
+#  1. If you are using WSL2 (*not WSL1*), it is highly recommended that you
+#     place this project in a location within your Linux installation's actual
+#     directory, as this is necessary for the debugger tools to work properly!
+#  2. To check to make sure you have Flask installed and set up, try running a
+#     development server with the flask command, and these flags: 
+#       a. --debug: enable debugging mode so you can make changes in real 
+#               time! make sure to follow (1) in order for it to work 
+#               properly.
+#       b. --app [app_name]: specify the name of the app, "trans", with the app
+#               flag.
+#       c. run: finally, affix "run" to the end of your command to run the
+#               server.
+#       the command should look like this:
+#       flask --debug --app trans run   
 # 
-# 
+#
+#
+# final note: All of this code exists exclusively and independently from our JS
+# code that lives on the frontend of our website. To call this code and get a
+# response, our Javascript
 
-from flask import Flask, url_for, render_template, request, jsonify, after_this_request, send_from_directory
+from flask import Flask, url_for, render_template, request, jsonify 
+from flask import after_this_request, send_from_directory
 import math
 import random
 
@@ -14,8 +37,7 @@ import random
 # note: this section is utilizing a third-party library that plugs into Google
 # translate, called 'Googletrans'.
 # TODO: install the library with 'pip3 install googletrans'
-from googletrans import Translator, constants
-from pprint import pprint
+from googletrans import Translator
 
 translator = Translator(service_urls=['translate.googleapis.com'])
 
@@ -24,13 +46,18 @@ translator = Translator(service_urls=['translate.googleapis.com'])
 
 # [ APP COMPONENT ]
 
-translations = ["wiojaefjiw","wjieoajewj","aiowjeiowefji"]
+# the combos object is part of functionality that we have not implemented yet.
 combos = {
         "Detect":["English", "German","Spanish"],
         "English":["German","Spanish"],
         "German":["English","Spanish"],
         "Spanish":["German","English"]
 }
+
+# the Googletrans library takes language codes, i.e. "de" for "German", as 
+# opposed to a full English name. Therefore, the langs object contains 
+# conversions between the full word and its corresponding code. In Python, you
+# can get a code by using a string index, i.e. langs["Spanish"] returns "es".
 langs = {
         "Detect":"auto",
         "German":"de",
@@ -42,16 +69,21 @@ langs = {
 
 app = Flask(__name__)
 
-
+# we create the router for our index page
 @app.route("/")
 def index():
+        # print statements can be viewable in the debugging output of the server.
         print("Hello World!")
+        # we create a url for accessing our style.css and main.js files so they
+        # are accessible by our code in index.html. Note that this also exposes
+        # those files to the web, meaning users will be able to view and 
+        # download them.
         url_for('static',filename='style.css')
         url_for('static',filename='main.js')
-        url_for('static',filename='.well-known/acme-challenge/oTmzGQ52oisrtMS52ZMXra2qhrZY2r-yzYzwlykbxDU')
+       # render_template returns our index.html file that contains our webpage.
         return render_template("index.html",name="MDST Official Translator")
 
-
+# adds a route to access the translate function.
 @app.route("/translate", methods=['GET'])
 def translate():
         @after_this_request
@@ -60,7 +92,6 @@ def translate():
                 return response
         
         args = request.args
-        # print("input: " + (args))
         print("RECEIVED A REQUEST FOR TRANSLATION...")
         input = args['str']
         from_lang = args['from']
@@ -72,10 +103,13 @@ def translate():
                 use_detected = True
         
         out_trans = translator.translate(input, dest=to_code, src=from_code)
-        print("WE ARE GIVEN THE FOLLOWING INPUT:\n" + input + "\nFROM THIS WE GET THIS OUTPUT:\n" + out_trans.text)
+        print("WE ARE GIVEN THE FOLLOWING INPUT:\n" + input 
+                + "\nFROM THIS WE GET THIS OUTPUT:\n" + out_trans.text)
         jsonResp = {
-                "output": out_trans.text
-                # "confidence": out_trans.confidence
+                "output": out_trans.text,
+                "status": 0 # by default we are returning status 0, but our 
+                            # code should return an appropriate value based on 
+                            # whether or not the translation was successful.
         }
 
 
@@ -87,15 +121,8 @@ def translate():
 def getCombos():
         @after_this_request
         def add_header(response):
-                response.headers.add('Access-Control-ALlow-Origin','*')
+                response.headers.add('Access-Control-Allow-Origin','*')
                 return response
         
         print("GETTING TRANSLATION COMBOS...")
         return jsonify(combos)
-        
-
-@app.route('/.well-known/acme-challenge/<path:path>')
-def getChallenge(path):
-        print("tried to access!! L fat L")
-        return send_from_directory('static',path)
-
