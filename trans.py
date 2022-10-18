@@ -38,7 +38,6 @@ import random
 # translate, called 'Googletrans'.
 # TODO: install the library with 'pip3 install googletrans'
 from googletrans import Translator
-
 translator = Translator(service_urls=['translate.googleapis.com'])
 
 
@@ -47,12 +46,12 @@ translator = Translator(service_urls=['translate.googleapis.com'])
 # [ APP COMPONENT ]
 
 # the combos object is part of functionality that we have not implemented yet.
-combos = {
-        "Detect":["English", "German","Spanish"],
-        "English":["German","Spanish"],
-        "German":["English","Spanish"],
-        "Spanish":["German","English"]
-}
+# combos = {
+#         "Detect":["English", "German","Spanish"],
+#         "English":["German","Spanish"],
+#         "German":["English","Spanish"],
+#         "Spanish":["German","English"]
+# }
 
 # the Googletrans library takes language codes, i.e. "de" for "German", as 
 # opposed to a full English name. Therefore, the langs object contains 
@@ -71,6 +70,7 @@ app = Flask(__name__)
 
 # we create the router for our index page
 @app.route("/")
+# the following function generates and sends our webpage to the end user
 def index():
         # print statements can be viewable in the debugging output of the server.
         print("Hello World!")
@@ -85,6 +85,11 @@ def index():
 
 # adds a route to access the translate function.
 @app.route("/translate", methods=['GET'])
+# [ TRANSLATION COMPONENT PART 2 ]
+# TODO:
+#       1. we need to replace this code which accesses the Googletrans 
+#          library/API with code that accesses our very own translation API.
+#       2. we need to add the ability to connect to different langauges/models.
 def translate():
         @after_this_request
         def add_header(response):
@@ -92,15 +97,13 @@ def translate():
                 return response
         
         args = request.args
+        # a status message is printed in the terminal output for helpful debugging
         print("RECEIVED A REQUEST FOR TRANSLATION...")
         input = args['str']
         from_lang = args['from']
         to_lang = args['to']
         from_code = langs[from_lang]
         to_code = langs[to_lang]
-        use_detected = False
-        if from_code == 'auto':
-                use_detected = True
         
         out_trans = translator.translate(input, dest=to_code, src=from_code)
         print("WE ARE GIVEN THE FOLLOWING INPUT:\n" + input 
