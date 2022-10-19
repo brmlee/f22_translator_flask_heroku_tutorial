@@ -8,25 +8,16 @@ https://f22-translator.herokuapp.com/
 Once you've done that, take a look at the structure of this project!
 The file structure should look something similar to this:
 
-.
-
-├── Procfile
-
-├── README.md
-
-├── requirements.txt
-
-├── static
-
-│   ├── main.js
-
-│   └── style.css
-
-├── templates
-
-│   └── index.html
-
-└── trans.py
+.<br/>
+├── Procfile<br/>
+├── README.md<br/>
+├── requirements.txt<br/>
+├── static<br/>
+│   ├── main.js<br/>
+│   └── style.css<br/>
+├── templates<br/>
+│   └── index.html<br/>
+└── trans.py<br/>
 
 
 First, note the Procfile: this is used by Heroku to automatically build our website once it is deployed from Github to their platform. Please don't touch it! It's perfectly fine the way it is.
