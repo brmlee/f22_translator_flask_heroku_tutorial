@@ -26,7 +26,8 @@
 #
 # final note: All of this code exists exclusively and independently from our JS
 # code that lives on the frontend of our website. To call this code and get a
-# response, our Javascript
+# response, our JavaScript code makes an asynchronous request to the server,
+# and triggers new code execution as soon as the server returns its response.
 
 from flask import Flask, url_for, render_template, request, jsonify 
 from flask import after_this_request, send_from_directory
@@ -97,7 +98,8 @@ def translate():
                 return response
         
         args = request.args
-        # a status message is printed in the terminal output for helpful debugging
+        # a status message is printed in the terminal output for helpful 
+        # debugging
         print("RECEIVED A REQUEST FOR TRANSLATION...")
         input = args['str']
         from_lang = args['from']
