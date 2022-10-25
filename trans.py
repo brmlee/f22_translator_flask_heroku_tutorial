@@ -122,6 +122,14 @@ def translate():
         print(jsonResp)
         return jsonify(jsonResp)
 
+@app.route('/predict', methods=['GET'])
+def predict():
+        
+
+
+# [ APP FUNCTIONALITY ]
+
+
 @app.route("/getCombos", methods=['GET'])
 def getCombos():
         @after_this_request
