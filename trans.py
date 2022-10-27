@@ -30,9 +30,7 @@
 # and triggers new code execution as soon as the server returns its response.
 
 from flask import Flask, url_for, render_template, request, jsonify 
-from flask import after_this_request, send_from_directory
-import math
-import random
+from flask import after_this_request
 
 # [ TRANSLATION COMPONENT ]
 # note: this section is utilizing a third-party library that plugs into Google
@@ -124,6 +122,7 @@ def translate():
 
 @app.route('/predict', methods=['GET'])
 def predict():
+        print("predicted something")
         
 
 
