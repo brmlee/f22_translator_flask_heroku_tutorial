@@ -30,7 +30,7 @@
 # and triggers new code execution as soon as the server returns its response.
 
 from flask import Flask, url_for, render_template, request, jsonify 
-from flask import after_this_request
+import model_out
 
 # [ TRANSLATION COMPONENT ]
 # note: this section is utilizing a third-party library that plugs into Google
@@ -45,12 +45,9 @@ translator = Translator(service_urls=['translate.googleapis.com'])
 # [ APP COMPONENT ]
 
 # the combos object is part of functionality that we have not implemented yet.
-# combos = {
-#         "Detect":["English", "German","Spanish"],
-#         "English":["German","Spanish"],
-#         "German":["English","Spanish"],
-#         "Spanish":["German","English"]
-# }
+combos = {
+        "French":["English"]
+}
 
 # the Googletrans library takes language codes, i.e. "de" for "German", as 
 # opposed to a full English name. Therefore, the langs object contains 
@@ -60,7 +57,8 @@ langs = {
         "Detect":"auto",
         "German":"de",
         "English":"en",
-        "Spanish":"es"
+        "Spanish":"es",
+        "French":"fr"
 }
 
 
@@ -90,11 +88,6 @@ def index():
 #          library/API with code that accesses our very own translation API.
 #       2. we need to add the ability to connect to different langauges/models.
 def translate():
-        @after_this_request
-        def add_header(response):
-                response.headers.add('Access-Control-Allow-Origin', '*')
-                return response
-        
         args = request.args
         # a status message is printed in the terminal output for helpful 
         # debugging
@@ -104,12 +97,16 @@ def translate():
         to_lang = args['to']
         from_code = langs[from_lang]
         to_code = langs[to_lang]
+        print("CREATED CORE OBJECTS")
         
         out_trans = translator.translate(input, dest=to_code, src=from_code)
+        print("FETCHING FROM MODEL")
+        # OVERRIDE
+        out_trans = model_out.translate(input)
         print("WE ARE GIVEN THE FOLLOWING INPUT:\n" + input 
-                + "\nFROM THIS WE GET THIS OUTPUT:\n" + out_trans.text)
+                + "\nFROM THIS WE GET THIS OUTPUT:\n" + out_trans)
         jsonResp = {
-                "output": out_trans.text,
+                "output": out_trans,
                 "status": 0 # by default we are returning status 0, but our 
                             # code should return an appropriate value based on 
                             # whether or not the translation was successful.
@@ -131,10 +128,5 @@ def predict():
 
 @app.route("/getCombos", methods=['GET'])
 def getCombos():
-        @after_this_request
-        def add_header(response):
-                response.headers.add('Access-Control-Allow-Origin','*')
-                return response
-        
         print("GETTING TRANSLATION COMBOS...")
         return jsonify(combos)

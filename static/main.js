@@ -82,3 +82,41 @@ function swap() {
     output_lang_selector.value = new_output_lang;
     input_lang_selector.value = new_input_lang;
 }
+
+async function getTranslationPairings() {
+    input_lang_selector.innerHTML = "<option value='unk'>... loading ...</option>";
+    output_lang_selector.innerHTML = "<option value='unk'>... loading ...</option>";
+    var req = window.location.origin + "/getCombos";
+    const response = await fetch(
+        req,
+        {
+            method: 'GET'
+        }
+    );
+    const data = await response.json();
+    console.warn(data);
+    keys = Object.keys(data);
+    input_lang_selector.innerHTML = "";
+    output_lang_selector.innerHTML = "";
+    console.log("TEST");
+    for(var i = 0; i < keys.length; i++) {
+        add_pairing([keys[i], data[keys[i]]]);
+    }
+}   
+
+function add_pairing(pair) {
+    console.log("ADDING PAIRING");
+    var in_str = pair[0],
+        out_str = pair[1];
+    var input_op = document.createElement("option"),
+        output_op = document.createElement("option");
+    input_op.setAttribute("value", in_str);
+    output_op.setAttribute("value", out_str);
+    input_op.innerHTML = in_str;
+    output_op.innerHTML = out_str;
+    console.log(pair);
+    input_lang_selector.innerHTML += input_op.outerHTML;
+    output_lang_selector.innerHTML += output_op.outerHTML;
+}
+
+getTranslationPairings();

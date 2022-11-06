@@ -15,6 +15,7 @@ import torch
 import torch.nn as nn
 from torch import optim
 import torch.nn.functional as F
+# from model import Lang
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
@@ -66,13 +67,24 @@ eng_prefixes = (
 
 
 
-
 import pickle
+class CustomUnpickler(pickle.Unpickler):
+
+    def find_class(self, module, name):
+        try:
+            return super().find_class(__name__, name)
+        except AttributeError:
+            return super().find_class(module, name)
+
+# pickle_data = CustomUnpickler(open('file_path.pkl', 'rb')).load()
 with open('data/lang_data.pkl', 'rb') as inp:
     print("attempt: loading input_lang from pickle")
-    input_lang = pickle.load(inp)
+    # input_lang = pickle.load(inp)
+    input_lang = CustomUnpickler(inp).load()
+    # input_lang = CustomUnpickler.load(inp)
     print("attempt: loading output_lang from pickle")
-    output_lang = pickle.load(inp)
+    # output_lang = pickle.load(inp)
+    output_lang = CustomUnpickler(inp).load()
     print("attempt: loading pairs from pickle")
     pairs = pickle.load(inp)
 
@@ -280,22 +292,22 @@ def trainIters(encoder, decoder, n_iters, print_every=1000, plot_every=100, lear
             plot_loss_avg = plot_loss_total / plot_every
             plot_losses.append(plot_loss_avg)
             plot_loss_total = 0
-    showPlot(plot_losses)
+    # showPlot(plot_losses)
 
 
-import matplotlib.pyplot as plt
-plt.switch_backend('agg')
-import matplotlib.ticker as ticker
+# import matplotlib.pyplot as plt
+# plt.switch_backend('agg')
+# import matplotlib.ticker as ticker
 import numpy as np
 
 
-def showPlot(points):
-    plt.figure()
-    fig, ax = plt.subplots()
-    # this locator puts ticks at regular intervals
-    loc = ticker.MultipleLocator(base=0.2)
-    ax.yaxis.set_major_locator(loc)
-    plt.plot(points)
+# def showPlot(points):
+#     # plt.figure()
+#     fig, ax = plt.subplots()
+#     # this locator puts ticks at regular intervals
+#     loc = ticker.MultipleLocator(base=0.2)
+#     ax.yaxis.set_major_locator(loc)
+#     plt.plot(points)
 
 
 
@@ -366,23 +378,23 @@ attn_decoder1.load_state_dict(checkpoint['decoder_dict'])
 
 
 
-def showAttention(input_sentence, output_words, attentions):
+# def showAttention(input_sentence, output_words, attentions):
     # Set up figure with colorbar
-    fig = plt.figure()
-    ax = fig.add_subplot(111)
-    cax = ax.matshow(attentions.numpy(), cmap='bone')
-    fig.colorbar(cax)
+    # fig = plt.figure()
+    # ax = fig.add_subplot(111)
+    # cax = ax.matshow(attentions.numpy(), cmap='bone')
+    # fig.colorbar(cax)
 
     # Set up axes
-    ax.set_xticklabels([''] + input_sentence.split(' ') +
-                       ['<EOS>'], rotation=90)
-    ax.set_yticklabels([''] + output_words)
+    # ax.set_xticklabels([''] + input_sentence.split(' ') +
+    #                    ['<EOS>'], rotation=90)
+    # ax.set_yticklabels([''] + output_words)
 
     # Show label at every tick
-    ax.xaxis.set_major_locator(ticker.MultipleLocator(1))
-    ax.yaxis.set_major_locator(ticker.MultipleLocator(1))
+    # ax.xaxis.set_major_locator(ticker.MultipleLocator(1))
+    # ax.yaxis.set_major_locator(ticker.MultipleLocator(1))
 
-    plt.show()
+    # plt.show()
 
 
 def evaluateAndShowAttention(input_sentence):
@@ -391,6 +403,12 @@ def evaluateAndShowAttention(input_sentence):
     
     print('input =', input_sentence)
     print('output =', ' '.join(output_words))
-    showAttention(input_sentence, output_words, attentions)
+    # showAttention(input_sentence, output_words, attentions)
+def translate(input_sentence):
+    output_words, attentions = evaluate(
+        encoder1, attn_decoder1, input_sentence)
+    return ' '.join(output_words)
 
-evaluateAndShowAttention("elle a cinq ans de moins que moi .")
+# evaluateAndShowAttention("elle a cinq ans de moins que moi .")
+
+translate("elle a cinq ans de moins que moi .")
