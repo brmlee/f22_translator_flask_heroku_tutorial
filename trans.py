@@ -36,8 +36,8 @@ import model_out
 # note: this section is utilizing a third-party library that plugs into Google
 # translate, called 'Googletrans'.
 # TODO: install the library with 'pip3 install googletrans'
-from googletrans import Translator
-translator = Translator(service_urls=['translate.googleapis.com'])
+# from googletrans import Translator
+# translator = Translator(service_urls=['translate.googleapis.com'])
 
 
 
@@ -99,7 +99,7 @@ def translate():
         to_code = langs[to_lang]
         print("CREATED CORE OBJECTS")
         
-        out_trans = translator.translate(input, dest=to_code, src=from_code)
+       #  out_trans = translator.translate(input, dest=to_code, src=from_code)
         print("FETCHING FROM MODEL")
         # OVERRIDE
         out_trans = model_out.translate(input)
