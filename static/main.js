@@ -20,8 +20,8 @@ var input = document.querySelector("#input > textarea"),
 
 
 // just adding some fun placeholder text :)
-input.value = "ich bin eine banane";
-output.textContent = "I am a banana";
+// input.value = "ich bin eine banane";
+// output.textContent = "I am a banana";
 input_lang_selector.value = "German";
 output_lang_selector.value = "English";
 
